@@ -1,0 +1,12 @@
+GROUPE 12
+
+Les données du problème 
+-----------------------
+
+Le nombre premier              : 337
+Le nombre de points ajoutés    : 22
+le nombre maximal d'erreurs    : 11
+qui sont situées avant l'indice: 24
+
+la liste reçue : 
+[231, 97, 38, 100, 233, 99, 111, 121, 101, 32, 145, 233, 154, 271, 114, 146, 80, 151, 151, 110, 115, 95, 99, 170, 32, 103, 114, 111, 117, 112, 101, 246, 42, 223, 132, 270, 304, 146, 149, 234, 187, 250, 62, 146, 25, 192, 273, 142, 2, 218, 193, 202, 222]
