@@ -186,7 +186,7 @@ def multiply_tow_polynomes(str_pol1, str_pol2):
         
 mult = multiply_tow_polynomes('2x^3 - x^2','3x^2')
 mult2 = multiply_tow_polynomes("4x^5 - x^3 + 4x^3 + 7x^9",'5x^5 5x^6')
-
+#dawid
 
 result = pol_to_str(mult)
 result2 = pol_to_str(mult2)
