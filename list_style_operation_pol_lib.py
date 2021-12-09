@@ -84,8 +84,17 @@ def to_readable_polynome(pol):
 
  #### Lagrange:
 def lagrange( pts_list ):
-    return 0
-    # @todo: create lagrange 
+    L = [0]
+    for j,pt0 in enumerate( pts_list ):
+        l_j = [1]
+        for k, pt in enumerate( pts_list ):
+            if k!= j:
+                l_j = produit(l_j , [-pt[0] , 1] )
+                l_j = produit(l_j , [ 1/(pt0[0]-pt[0]) ] )
+        l_j = produit( l_j , [ pt0[1] ] )
+        L = addition( L , l_j )
+    return L
+ 
 
 
 result = to_readable_polynome([1,2,4,5])
