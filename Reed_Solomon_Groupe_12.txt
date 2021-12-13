@@ -4,6 +4,7 @@ Les données du problème
 -----------------------
 
 Le nombre premier              : 337
+La longueur du message de base : 31
 Le nombre de points ajoutés    : 22
 le nombre maximal d'erreurs    : 11
 qui sont situées avant l'indice: 24
