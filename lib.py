@@ -95,18 +95,19 @@ def evaluate_polynome(pol, point):
     return result
 
 
-#### Lagrange:
+# on retourne la poylnome de lagrange:
 def lagrange(pts_list, nb_premier):
     result = []
-    for j, pt0 in enumerate(pts_list):
-        l_j = [1] # Polynome de lagrane pour un point
-        for k, pt in enumerate(pts_list):
-            if k!= j:
-                l_j = produit_nb_premier(l_j , [-pt[0] , 1], nb_premier)
+
+    for i, pt0 in enumerate(pts_list):
+        pol_lag = [1] # Polynome de lagrane 
+        for j, pt in enumerate(pts_list):
+            if j != i:
+                pol_lag = produit_nb_premier(pol_lag , [-pt[0] , 1], nb_premier)
                 x = (pt0[0] - pt[0])
-                l_j = produit_nb_premier(l_j, [mod_inverse(x, nb_premier)], nb_premier)
-        l_j = produit_nb_premier(l_j , [ pt0[1] ], nb_premier)
-        result = addition(result , l_j)
+                pol_lag = produit_nb_premier(pol_lag, [mod_inverse(x, nb_premier)], nb_premier)
+        pol_lag = produit_nb_premier(pol_lag , [ pt0[1] ], nb_premier)
+        result = addition(result , pol_lag)
     return result
 
 # convert list style polynome to string style polynome like (anx^n + an-1x^n-1 + ... a0)
@@ -182,3 +183,12 @@ def mod_inverse_brutforce(x,nb_premier):
         else:
             continue
 
+
+def combinaison_point(lst_pt):
+    result = []
+
+    for i, pt0 in enumerate(lst_pt):
+        for j in range(i + 1, len(lst_pt)):
+            result.append([pt0, lst_pt[j]])
+    
+    return result
