@@ -5,9 +5,6 @@
 # ---------------------------------------------------------------------------
 # LIB V.0.0.1 ALPHA
 # ---------------------------------------------------------------------------
-# 
-# ---------------------------------------------------------------------------
-
 # addition of two polynomes 
 # on reçoit deux lists de coéficent des polynomes
 # on addtion coef par ceof sil exists 
@@ -31,108 +28,51 @@ def addition(pol_a, pol_b):
             result.append(pol_max[i])
 
     return result
-    
-#multiplication of two polynomes 
-def produit(pol_a, pol_b):
 
-    # creating a list with a fixed size  [1,2] * [1,3,4] => [1, 3, 4, 2, 6, 8] : length = 2 * 3 = 6 or [0 until 5 ] == 6 element 
-    result = [0] * (len(pol_a) + len(pol_b) - 1)
-
-    for i in range(0, len(pol_a)):
-
-        for j in range(0, len(pol_b)):
-            # multiply the coeficents and addition the cofecient which has the same exponent 
-            result[i + j] += pol_a[i] * pol_b[j]
-            
-    return result
-
-
-
-
-#multiplication of two polynomes modulo nombre premier 
 def produit_nb_premier(pol_a, pol_b, nb_premier):
-
-    # creating a list with a fixed size  [1,2] * [1,3,4] => [1, 3, 4, 2, 6, 8] : length = 2 * 3 = 6 or [0 until 5 ] == 6 element 
     result = [0] * (len(pol_a) + len(pol_b) - 1)
 
     for i in range(0, len(pol_a)):
 
         for j in range(0, len(pol_b)):
-            # multiply the coeficents and addition the cofecient which has the same exponent 
+            # multiplication avec le même exposant
             result[i + j] += (pol_a[i] * pol_b[j]) % nb_premier
             
     return result
 
-
-
-# soustraction of two poylnomes
-def soustraction(pol_a, pol_b):
-
-    # we multiply pol_b with -1 
-    pol_b = produit(pol_b, [-1])
-    # then we add to pol_a 
-    result = addition(pol_a, pol_b)
-    return result 
-
-# soustraction of two poylnomes modulo premier 
-def soustraction_nb_premier(pol_a, pol_b, nb_premier):
-    # then we add to pol_a 
-    result = addition(pol_a, produit_nb_premier(pol_b, [-1], nb_premier))
-    return result 
-
-    
-
-# finds the image of a polynome 
+#image du polynom
 def evaluate_polynome(pol, point):
-
     result = 0
-    # loop in reversed mood for (int i = size; i >0; i--)
+    # boucle qui parcours le tableau de polynome en partant de la fin 
     for i in range(len(pol) -1, 0, -1):
-         result += point ** i * pol[i] # image of a polynome on x 
-    
-    # add the free term ax^2 + 3x + 2 = here add the 2 to our polynome  
-    result += pol[0] 
+         result += point ** i * pol[i] # point puissance i(degré) * polynome 
+    result += pol[0]
     return result
 
-
+#### Lagrange:
 # on retourne la poylnome de lagrange:
+# notre poylnome de lagrange est de degrée 2 
 def lagrange(pts_list, nb_premier):
-    result = []
-
-    for i, pt0 in enumerate(pts_list):
-        pol_lag = [1] # Polynome de lagrane 
-        for j, pt in enumerate(pts_list):
+    polynomes = []
+    for i, y in enumerate(pts_list):
+        monom = [1] # on calcul a,b,c -> : ax^2 + bx + c 
+        for j, x in enumerate(pts_list):
             if j != i:
-                pol_lag = produit_nb_premier(pol_lag , [-pt[0] , 1], nb_premier)
-                x = (pt0[0] - pt[0])
-                pol_lag = produit_nb_premier(pol_lag, [mod_inverse(x, nb_premier)], nb_premier)
-        pol_lag = produit_nb_premier(pol_lag , [ pt0[1] ], nb_premier)
-        result = addition(result , pol_lag)
-    return result
-
-# convert list style polynome to string style polynome like (anx^n + an-1x^n-1 + ... a0)
-def to_readable_polynome(pol):
-
-    result = ''
-    if len(pol) > 1:
-        result += str(pol[0]) + ' + '
-        for i in range(1, len(pol), 1):
-            if i == 1:
-                result += str(pol[i])+'x'
-            else :
-                if i == len(pol) -1:
-                    result += ' + ' + str(pol[i])+'x^' + str(i)
-                else : 
-                    result += ' + ' +  str(pol[i])+'x^' + str(i)
-    else :
-        if len(pol) == 1:
-            result = pol[0]
+                # pour chaque probable poylnome on a besoin de deux point
+                # ce qui on trouve ici 
+                monom = produit_nb_premier(monom , [-x[0] , 1], nb_premier)
+                # dénominateur de l'agrange (1-2)(1-3)
+                denuminateur = (y[0] - x[0])
+                # produit de notre monom avec l'inverse modulaire de notre dénominateur par nb_premier est stoquer dans notre variable monom 
+                monom = produit_nb_premier(monom, [mod_inverse(denuminateur, nb_premier)], nb_premier)
+        
+        monom = produit_nb_premier(monom , [ y[1] ], nb_premier)
+        polynomes = addition(polynomes , monom)
+    return polynomes
 
 
-    return result
- 
-
-
+#pt_list = [231, 97, 38, 100, 233, 99, 111, 121, 101, 32, 145, 233, 154, 271, 114, 146, 80, 151, 151, 110, 115, 95, 99, 170, 32, 103, 114, 111, 117, 112, 101, 246, 42, 223, 132, 270, 304, 146, 149, 234, 187, 250, 62, 146, 25, 192, 273, 142, 2, 218, 193, 202, 222]
+#print(lagrange(pt_list, 337))
 
 #inverse modulaire par euclide etendu 
 def euclide_etendu(dividende, diviseur):
@@ -164,31 +104,15 @@ def euclide_etendu(dividende, diviseur):
     else:
         return (v ,u, v % diviseur_pour_inverse)
 
-
-
-# inverse modulaire par method euclid etendu 
-def mod_inverse(a, nb_premier):
-    return euclide_etendu(a, nb_premier)[0]
-
-
-# inverse modulaire par brutforce 
-def mod_inverse_brutforce(x,nb_premier):
-    for n in range(nb_premier):
-        if (x * n) % nb_premier == 1:
-            return n
-            break
-
-        elif n == nb_premier - 1:
-            return "Null"
-        else:
-            continue
-
-
-def combinaison_point(lst_pt):
+def combinaison_points(lst_pt):
     result = []
 
     for i, pt0 in enumerate(lst_pt):
-        for j in range(i + 1, len(lst_pt)):
+        for j in range(i+1, len(lst_pt)):
             result.append([pt0, lst_pt[j]])
-    
+        
     return result
+    
+# inverse modulaire par method euclid etendu 
+def mod_inverse(a, nb_premier):
+    return euclide_etendu(a, nb_premier)[2] #récupère inverse qui est le 3ème élément retourner par euclide etendu

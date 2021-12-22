@@ -7,10 +7,9 @@
 # ---------------------------------------------------------------------------
 # 
 # ---------------------------------------------------------------------------
-#
-
-# from lib import lagrange
 from lib import  *
+#librairie calculant le nombre de points équivalents
+from collections import Counter
 """
 GROUPE 12
 
@@ -29,81 +28,56 @@ la liste reçue :
 
 pt_list = [231, 97, 38, 100, 233, 99, 111, 121, 101, 32, 145, 233, 154, 271, 114, 146, 80, 151, 151, 110, 115, 95, 99, 170, 32, 103, 114, 111, 117, 112, 101, 246, 42, 223, 132, 270, 304, 146, 149, 234, 187, 250, 62, 146, 25, 192, 273, 142, 2, 218, 193, 202, 222]
 
-# retourne une list de type [(0, 231), (1,97), ....]
-pt_list = [(index, value) for index, value in enumerate(pt_list) ]
+pt_list = [(index, value) for index, value in enumerate(pt_list)]
 
+# étape 01 : on crée une list des point erroné 
+points_erreur  = pt_list[0:23] #récuère les 23 premiers points de la liste
 
-# on découpe la list en deux partie, une partie érronée
-les_points_erroné  = pt_list[0:23] # partie érronée 
-
-
-les_points_justes = pt_list[24:len(pt_list)] # partie avec des points justes 
-
-import itertools
-from collections import Counter
+# étape 02 : on crée une list des points intacts 
+points_correct = pt_list[24:len(pt_list)] #récupère les derniers points de la liste à partir du 24 ème
 
 # list de combinaison des point erronés
-# cobinaison_list = [list(p) for p in itertools.combinations(les_points_erroné, 2)] # on crée la combinaison de la partie érronée 
-
-combinaison_list = combinaison_point(les_points_erroné)
+combinaison_list = combinaison_points(points_erreur)
+#print(combinaison_list)
 nb_premier = 337
 
-
-# on calcule tous les polynomes de lagrange possible 
 def calcul_lagrange_polynomes():
-    polynom_list = [] # list des poylnomes de lagrange possible 
-
-
+    polynom_list = [] # création liste de polynome
     for i in combinaison_list:
-        # Creer la liste de points de 31 elements
-        les_points_corrects = i.copy()
-        les_points_corrects.extend(les_points_justes) # copy l'element corespondant de la liste contenant des points justes 
+        # liste longeur message
+        lst_point = i.copy()
+        lst_point.extend(points_correct)
 
-        flag_new_poly = True
+        controle_polynom = 1
+        polynome = lagrange(lst_point,nb_premier)
 
-        # Calcule de lagrange pour les points qui sont correct
-        polynome = lagrange(les_points_corrects,nb_premier)
-
-
-        #Verifi le polynome au tableau pour compter les apparitions
+        #compteur d'apparition
         for r in polynom_list:
             if Counter(polynome) == Counter(r[1]):
-                r[0] += 1
-                flag_new_poly = False
+                controle_polynom = 0
 
-        # une fois trouvé la polynome on rajoute dans notre list de polynome 
-        if flag_new_poly:
+        if controle_polynom:
             polynom_list.append([1, polynome])
-    
-    print("Il y a {} listes de points et {} polynomes de lagrange".format(len(combinaison_list), len(polynom_list)))
-
-    # Comparre les aparitions pour retourner celle qui apparrait le plus
+  
+    # le + de apparitions
     tmp = 0
-    val = 0
+    polynomes_occurance_max = 0
     for pol in polynom_list:
-        if tmp < pol[0]:
+        if tmp < pol[0]: # frequence de la polynomes
             tmp = pol[0]
-            val = pol[1].copy()
-    return val
+            polynomes_occurance_max = pol[1].copy()
+    return polynomes_occurance_max
 
-polynome_trouvé  = calcul_lagrange_polynomes()
-
-print("=============================================================")
-print(f'polynome trouvée est :\n{to_readable_polynome(polynome_trouvé)}')
-print("=============================================================")
+polynome_trouve  = calcul_lagrange_polynomes()
 
 la_taile_de_message_de_base = 31
 message = ""
 
 # génère le message 
 for i in range(0, la_taile_de_message_de_base):
-    ch = round((evaluate_polynome(polynome_trouvé, i) % nb_premier))
-    message += chr(ch)
-
+    caractere_unicode = evaluate_polynome(polynome_trouve, i) % nb_premier
+    message += chr(caractere_unicode) #retourne le charactère correspondant à son unicode qu'on met dans un string
 
 print("\n\n=============================================================")
 print(f'le message : {message}')
 print("=============================================================\n\n")
-
-
-
