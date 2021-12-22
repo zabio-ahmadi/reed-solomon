@@ -1,12 +1,10 @@
 #----------------------------------------------------------------------------
-# Created By  : Kurteshi, Ahamadi, Dymarcyzk
+# Created By  : Kurteshi, Ahamadi, Dymarczyk
 # Created Date: 06.12.2021
+# finisehd Date : 22.12.2021
 # version ='1.0'
 # ---------------------------------------------------------------------------
-# LIB V.0.0.1 ALPHA
-# ---------------------------------------------------------------------------
-# 
-# ---------------------------------------------------------------------------
+# MAIN
 from lib import  *
 #librairie calculant le nombre de points équivalents
 from collections import Counter
@@ -50,14 +48,7 @@ def calcul_lagrange_polynomes():
 
         controle_polynom = 1
         polynome = lagrange(lst_point,nb_premier)
-
-        #compteur d'apparition
-        for r in polynom_list:
-            if Counter(polynome) == Counter(r[1]):
-                controle_polynom = 0
-
-        if controle_polynom:
-            polynom_list.append([1, polynome])
+        polynom_list.append([1, polynome])
   
     # le + de apparitions
     tmp = 0
