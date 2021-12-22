@@ -7,7 +7,6 @@
 # ---------------------------------------------------------------------------
 # 
 # ---------------------------------------------------------------------------
-# from lib import lagrange
 from lib import  *
 #librairie calculant le nombre de points équivalents
 from collections import Counter
@@ -45,17 +44,14 @@ nb_premier = 337
 def calcul_lagrange_polynomes():
     polynom_list = [] # création liste de polynome
     for i in combinaison_list:
-        # Creer la liste de points de 31 elements
+        # liste longeur message
         lst_point = i.copy()
         lst_point.extend(points_correct)
 
         controle_polynom = 1
-
-        # Calcule de lagrange pour les points qui sont correct
         polynome = lagrange(lst_point,nb_premier)
 
-
-        #Verifi le polynome au tableau pour compter les apparitions
+        #compteur d'apparition
         for r in polynom_list:
             if Counter(polynome) == Counter(r[1]):
                 controle_polynom = 0
@@ -63,7 +59,7 @@ def calcul_lagrange_polynomes():
         if controle_polynom:
             polynom_list.append([1, polynome])
   
-    # Comparre les aparitions pour retourner celle qui apparrait le plus
+    # le + de apparitions
     tmp = 0
     val = 0
     for pol in polynom_list:
