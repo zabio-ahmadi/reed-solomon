@@ -46,15 +46,21 @@ def calcul_lagrange_polynomes():
         lst_point = i.copy()
         lst_point.extend(points_correct)
         
+        # a flag for new polynome
+        new_polynome = True
+        
         polynome = lagrange(lst_point,nb_premier)
         
-        polynom_list.append([1, polynome])
         for p in polynom_list:
-            if Counter(polynome) == Counter(p[1]):
+            if sorted(p[1]) == sorted(polynome):
                 p[0] +=1
-    
+                new_polynome = False
+
+        if new_polynome:
+            polynom_list.append([1, polynome])
 
     # le + de apparitions
+    # calcul la polynome qui est répeatée le plus 
     tmp = 0
     polynomes_occurance_max = 0
     for pol in polynom_list:

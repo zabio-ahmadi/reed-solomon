@@ -10,7 +10,7 @@
 # on reçoit deux lists de coéficent des polynomes
 # on addtion coef par ceof sil exists 
 # addtion([2, 1, 3], [4, 3, 1])
-def addition(pol_a, pol_b):
+def addition(pol_a, pol_b, nb_premier):
     
     if len(pol_a) > len(pol_b):
         pol_max = pol_a
@@ -23,10 +23,10 @@ def addition(pol_a, pol_b):
     for i in range(len(pol_max)):
         
         if i < len(pol_min):
-            result.append(pol_max[i] + pol_min[i])
+            result.append((pol_max[i] + pol_min[i]) % nb_premier)
         
         else: 
-            result.append(pol_max[i])
+            result.append(pol_max[i] % nb_premier)
 
     return result
 
@@ -68,7 +68,8 @@ def lagrange(pts_list, nb_premier):
                 monom = produit_nb_premier(monom, [mod_inverse(denuminateur, nb_premier)], nb_premier)
         
         monom = produit_nb_premier(monom , [ y[1] ], nb_premier)
-        polynomes = addition(polynomes , monom)
+        #
+        polynomes = addition(polynomes , monom, nb_premier)
     return polynomes
 
 
