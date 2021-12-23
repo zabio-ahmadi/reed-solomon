@@ -45,11 +45,15 @@ def calcul_lagrange_polynomes():
         # liste longeur message
         lst_point = i.copy()
         lst_point.extend(points_correct)
-
-        controle_polynom = 1
+        
         polynome = lagrange(lst_point,nb_premier)
+        
         polynom_list.append([1, polynome])
-  
+        for p in polynom_list:
+            if Counter(polynome) == Counter(p[1]):
+                p[0] +=1
+    
+
     # le + de apparitions
     tmp = 0
     polynomes_occurance_max = 0
